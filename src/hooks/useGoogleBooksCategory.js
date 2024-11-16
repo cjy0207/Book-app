@@ -6,7 +6,7 @@ const fetchBooksByCategory = async (category) => {
     params: {
       q: `subject:${category}`, 
       key: process.env.REACT_APP_API_KEY,
-      maxResults: 10,
+      maxResults: 15,
       orderBy: "relevance", 
     },
   });
