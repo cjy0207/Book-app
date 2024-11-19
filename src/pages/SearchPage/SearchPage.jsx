@@ -2,22 +2,20 @@ import React, { useState } from "react";
 import { useSearchBookQuery } from "../../hooks/useSearchBook";
 
 const SearchPage = () => {
-  const [input, setInput] = useState(""); // 검색 입력값
-  const [keyword, setKeyword] = useState(""); // 실제 검색어
+  const [input, setInput] = useState(""); 
+  const [keyword, setKeyword] = useState(""); 
 
   const { data, isLoading, error } = useSearchBookQuery({ keyword });
-    console.log("search", data)
-  // 입력 필드 업데이트
+  console.log("search", data);
+
   const handleInputChange = (e) => {
     setInput(e.target.value);
   };
 
-  // 검색 실행
   const handleSearch = () => {
-    setKeyword(input); // 입력값을 검색어로 설정
+    setKeyword(input); 
   };
 
-  // Enter 키로 검색 실행
   const handleKeyPress = (e) => {
     if (e.key === "Enter") {
       handleSearch();
@@ -25,16 +23,23 @@ const SearchPage = () => {
   };
 
   return (
-    <div>
-      <h1>Book Search</h1>
-      <div style={{ marginBottom: "20px" }}>
+    <div style={{ fontFamily: "Arial, sans-serif", padding: "20px" }}>
+      <h1 style={{ textAlign: "center" }}>Book Search</h1>
+      <div style={{ marginBottom: "20px", textAlign: "center" }}>
         <input
           type="text"
           value={input}
           onChange={handleInputChange}
           onKeyPress={handleKeyPress}
           placeholder="Search for books..."
-          style={{ width: "80%", padding: "10px", fontSize: "16px" }}
+          style={{
+            width: "80%",
+            maxWidth: "500px",
+            padding: "10px",
+            fontSize: "16px",
+            border: "1px solid #ccc",
+            borderRadius: "5px",
+          }}
         />
         <button
           onClick={handleSearch}
@@ -43,13 +48,17 @@ const SearchPage = () => {
             marginLeft: "10px",
             fontSize: "16px",
             cursor: "pointer",
+            backgroundColor: "#007BFF",
+            color: "white",
+            border: "none",
+            borderRadius: "5px",
           }}
         >
           Search
         </button>
       </div>
-      {isLoading && <p>Loading...</p>}
-      {error && <p>Error: {error.message}</p>}
+      {isLoading && <p style={{ textAlign: "center" }}>Loading...</p>}
+      {error && <p style={{ textAlign: "center", color: "red" }}>Error: {error.message}</p>}
       <ul style={{ listStyleType: "none", padding: 0 }}>
         {data?.items?.map((book) => {
           const {
@@ -65,36 +74,62 @@ const SearchPage = () => {
           } = book.volumeInfo;
 
           return (
-            <li key={book.id} style={{ marginBottom: "20px", borderBottom: "1px solid #ccc", paddingBottom: "20px" }}>
-              {/* 이미지 */}
+            <li
+              key={book.id}
+              style={{
+                display: "flex",
+                gap: "20px",
+                marginBottom: "20px",
+                borderBottom: "1px solid #ccc",
+                paddingBottom: "20px",
+                alignItems: "flex-start",
+              }}
+            >
               <img
-                src={imageLinks?.thumbnail || "https://via.placeholder.com/128x192?text=No+Image"}
+                src={
+                  imageLinks?.thumbnail ||
+                  "https://via.placeholder.com/128x192?text=No+Image"
+                }
                 alt={title}
-                style={{ width: "128px", height: "192px", marginBottom: "10px" }}
+                style={{ width: "128px", height: "192px", objectFit: "cover" }}
               />
 
-              {/* 책 제목 */}
-              <h3>{title || "No Title Available"}</h3>
+              <div>
+                <h3 style={{ margin: "0 0 10px" }}>
+                  {title || "No Title Available"}
+                </h3>
 
-              {/* 작가 / 출간 년도 / 출판사 */}
-              <p>
-                {authors?.join(", ") || "Unknown Author"} | {publishedDate || "Unknown Year"} |{" "}
-                {publisher || "Unknown Publisher"}
-              </p>
+                <p style={{ margin: "0 0 5px" }}>
+                  <strong>Authors:</strong> {authors?.join(", ") || "Unknown Author"}
+                </p>
+                <p style={{ margin: "0 0 5px" }}>
+                  <strong>Publisher:</strong> {publisher || "Unknown Publisher"}
+                </p>
+                <p style={{ margin: "0 0 10px" }}>
+                  <strong>Published:</strong> {publishedDate || "Unknown Year"}
+                </p>
 
-              {/* 카테고리 */}
-              <p>Categories: {categories?.join(", ") || "No Categories Listed"}</p>
+                <p style={{ margin: "0 0 10px" }}>
+                  <strong>Categories:</strong>{" "}
+                  {categories?.join(", ") || "No Categories Listed"}
+                </p>
 
-              {/* 줄거리 */}
-              <p>Description: {description || "No description available."}</p>
+                <p style={{ margin: "0 0 10px" }}>
+                  <strong>Description:</strong>{" "}
+                  {description
+                    ? description.length > 100
+                      ? description.substring(0, 100) + "..."
+                      : description
+                    : "No description available."}
+                </p>
 
-              {/* 별점 */}
-              <p>
-                Rating:{" "}
-                {averageRating
-                  ? `${averageRating} / 5 (${ratingsCount || 0} ratings)`
-                  : "No ratings available"}
-              </p>
+                <p style={{ margin: "0" }}>
+                  <strong>Rating:</strong>{" "}
+                  {averageRating
+                    ? `${averageRating} / 5 (${ratingsCount || 0} ratings)`
+                    : "No ratings available"}
+                </p>
+              </div>
             </li>
           );
         })}
