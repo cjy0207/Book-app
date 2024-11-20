@@ -1,15 +1,22 @@
 import './App.css';
+import "bootstrap/dist/css/bootstrap.min.css";
 import { Route, Routes } from 'react-router-dom';
 import HomePage from './pages/HomePage/HomePage';
 import SearchPage from './pages/SearchPage/SearchPage';
-import DetailPage from './pages/DetailPage/DetailPage';
+import BookDetailPage from './pages/DetailPage/BookDetailPage';
+import AuthorDetailPage from './pages/DetailPage/AuthorDetailPage';
 
 function App() {
   return (
     <Routes>
-      <Route path="/" element={<HomePage/>}></Route>
-      <Route path=":id" element={<DetailPage/>}></Route>
-      <Route path="/search" element={<SearchPage/>}></Route>
+      <Route path="/" element={<HomePage />} />
+      <Route path="/search" element={<SearchPage />} />
+
+      <Route path="/detail">
+        <Route path="book/:id" element={<BookDetailPage />} />
+        <Route path="author/:author" element={<AuthorDetailPage />} />
+        
+      </Route>
     </Routes>
   );
 }
