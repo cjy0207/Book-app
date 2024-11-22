@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useGoogleBooksCategory } from "../../hooks/useGoogleBooksCategory";
 
-const Homepage = () => {
+const HomePage = () => {
   const [category, setCategory] = useState("Fiction"); 
   const { data, isLoading, isError, error } = useGoogleBooksCategory(category);
 
@@ -51,4 +51,4 @@ const Homepage = () => {
   );
 };
 
-export default Homepage;
+export default HomePage;
