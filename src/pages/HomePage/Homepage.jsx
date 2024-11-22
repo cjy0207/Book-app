@@ -5,10 +5,14 @@ import "slick-carousel/slick/slick-theme.css";
 import Carousel from 'react-bootstrap/Carousel';
 import CarouselImage from '../../components/CarouselImage';
 import "./HomePage.css";
+import { useGoogleBooksCategory } from "../../hooks/useGoogleBooksCategory";
 
 const HomePage = () => {
   const [category, setCategory] = useState("Fiction"); 
   const { data, isLoading, isError, error } = useGoogleBooksCategory(category);
+
+  const [books, setBooks] = useState([]); // Added
+  const [loading, setLoading] = useState(true); // Added
 
   const slides = [
     { id: 1, src: "/images/image1.jpg", alt: "Image 1"},
