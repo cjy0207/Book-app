@@ -6,9 +6,9 @@ import Carousel from 'react-bootstrap/Carousel';
 import CarouselImage from '../../components/CarouselImage';
 import "./HomePage.css";
 
-const Homepage = () => {
-  const [books, setBooks] = useState([]); // API에서 가져온 책 데이터를 저장
-  const [loading, setLoading] = useState(true); // 로딩 상태 관리
+const HomePage = () => {
+  const [category, setCategory] = useState("Fiction"); 
+  const { data, isLoading, isError, error } = useGoogleBooksCategory(category);
 
   const slides = [
     { id: 1, src: "/images/image1.jpg", alt: "Image 1"},
@@ -139,4 +139,4 @@ const Homepage = () => {
   );
 };
 
-export default Homepage;
+export default HomePage;

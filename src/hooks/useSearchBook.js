@@ -1,21 +1,22 @@
 import { useQuery } from "@tanstack/react-query";
 import api from "../utils/api";
 
-const fetchSearchBook = ({ keyword }) => {
+const fetchSearchBook = ({ keyword, page, resultsPerPage }) => {
   return api.get("/volumes", {
     params: {
-      q: keyword, // 검색 키워드
-      maxResults: 10, // 최대 결과 수
-      key: process.env.REACT_APP_API_KEY, // API 키
+      q: keyword, 
+      maxResults: resultsPerPage, 
+      startIndex: (page - 1) * resultsPerPage, 
+      key: process.env.REACT_APP_API_KEY, 
     },
   });
 };
 
-export const useSearchBookQuery = ({ keyword }) => {
+export const useSearchBookQuery = ({ keyword, page = 1, resultsPerPage = 30 }) => {
   return useQuery({
-    queryKey: ["book-search", { keyword }],
-    queryFn: () => fetchSearchBook({ keyword }),
-    enabled: !!keyword, // 검색어가 있을 때만 실행
+    queryKey: ["book-search", { keyword, page, resultsPerPage }],
+    queryFn: () => fetchSearchBook({ keyword, page, resultsPerPage }),
+    enabled: !!keyword, 
     select: (results) => results.data,
   });
 };

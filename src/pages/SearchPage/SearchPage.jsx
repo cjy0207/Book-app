@@ -1,23 +1,25 @@
 import React, { useState } from "react";
-import { useSearchBookQuery } from "../../hooks/useSearchBook";
+import { useSearchParams } from "react-router-dom";
+import { Container, Row, Col, Button } from "react-bootstrap";
+import AuthorSearchResults from "./components/AuthorSearchResults";
+import BookSearchResults from "./components/BookSearchResults";
 
 const SearchPage = () => {
-  const [input, setInput] = useState(""); // 검색 입력값
-  const [keyword, setKeyword] = useState(""); // 실제 검색어
+  const [input, setInput] = useState("");
+  const [searchParams, setSearchParams] = useSearchParams();
+  const [currentPage, setCurrentPage] = useState(1);
+  const keyword = searchParams.get("keyword") || "";
+  const resultsPerPage = 4;
 
-  const { data, isLoading, error } = useSearchBookQuery({ keyword });
-    console.log("search", data)
-  // 입력 필드 업데이트
   const handleInputChange = (e) => {
     setInput(e.target.value);
   };
 
-  // 검색 실행
   const handleSearch = () => {
-    setKeyword(input); // 입력값을 검색어로 설정
+    setSearchParams({ keyword: input });
+    setCurrentPage(1);
   };
 
-  // Enter 키로 검색 실행
   const handleKeyPress = (e) => {
     if (e.key === "Enter") {
       handleSearch();
@@ -25,81 +27,57 @@ const SearchPage = () => {
   };
 
   return (
-    <div>
-      <h1>Book Search</h1>
-      <div style={{ marginBottom: "20px" }}>
-        <input
-          type="text"
-          value={input}
-          onChange={handleInputChange}
-          onKeyPress={handleKeyPress}
-          placeholder="Search for books..."
-          style={{ width: "80%", padding: "10px", fontSize: "16px" }}
-        />
-        <button
-          onClick={handleSearch}
-          style={{
-            padding: "10px 20px",
-            marginLeft: "10px",
-            fontSize: "16px",
-            cursor: "pointer",
-          }}
-        >
-          Search
-        </button>
+    <Container style={{ fontFamily: "Arial, sans-serif", padding: "20px" }}>
+      <Row className="mb-4">
+        <Col>
+          <h1 style={{ textAlign: "center" }}>Book and Author Search</h1>
+        </Col>
+      </Row>
+
+      <Row className="mb-4" style={{ textAlign: "center" }}>
+        <Col md={8} className="mx-auto">
+          <input
+            type="text"
+            value={input}
+            onChange={handleInputChange}
+            onKeyPress={handleKeyPress}
+            placeholder="Search for books or authors..."
+            style={{
+              width: "100%",
+              padding: "10px",
+              fontSize: "16px",
+              border: "1px solid #ccc",
+              borderRadius: "5px",
+            }}
+          />
+        </Col>
+        <Col md="auto">
+          <Button
+            onClick={handleSearch}
+            style={{
+              fontSize: "16px",
+              backgroundColor: "#007BFF",
+              borderColor: "#007BFF",
+            }}
+          >
+            Search
+          </Button>
+        </Col>
+      </Row>
+
+      <div style={{ marginBottom: "40px" }}>
+        <AuthorSearchResults keyword={keyword} />
       </div>
-      {isLoading && <p>Loading...</p>}
-      {error && <p>Error: {error.message}</p>}
-      <ul style={{ listStyleType: "none", padding: 0 }}>
-        {data?.items?.map((book) => {
-          const {
-            title,
-            authors,
-            publisher,
-            publishedDate,
-            categories,
-            description,
-            averageRating,
-            ratingsCount,
-            imageLinks,
-          } = book.volumeInfo;
 
-          return (
-            <li key={book.id} style={{ marginBottom: "20px", borderBottom: "1px solid #ccc", paddingBottom: "20px" }}>
-              {/* 이미지 */}
-              <img
-                src={imageLinks?.thumbnail || "https://via.placeholder.com/128x192?text=No+Image"}
-                alt={title}
-                style={{ width: "128px", height: "192px", marginBottom: "10px" }}
-              />
-
-              {/* 책 제목 */}
-              <h3>{title || "No Title Available"}</h3>
-
-              {/* 작가 / 출간 년도 / 출판사 */}
-              <p>
-                {authors?.join(", ") || "Unknown Author"} | {publishedDate || "Unknown Year"} |{" "}
-                {publisher || "Unknown Publisher"}
-              </p>
-
-              {/* 카테고리 */}
-              <p>Categories: {categories?.join(", ") || "No Categories Listed"}</p>
-
-              {/* 줄거리 */}
-              <p>Description: {description || "No description available."}</p>
-
-              {/* 별점 */}
-              <p>
-                Rating:{" "}
-                {averageRating
-                  ? `${averageRating} / 5 (${ratingsCount || 0} ratings)`
-                  : "No ratings available"}
-              </p>
-            </li>
-          );
-        })}
-      </ul>
-    </div>
+      <div style={{ marginTop: "40px" }}>
+        <BookSearchResults
+          keyword={keyword}
+          currentPage={currentPage}
+          resultsPerPage={resultsPerPage}
+          setCurrentPage={setCurrentPage}
+        />
+      </div>
+    </Container>
   );
 };
 
