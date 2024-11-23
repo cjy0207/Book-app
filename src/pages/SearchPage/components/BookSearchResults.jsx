@@ -7,8 +7,11 @@ const BookSearchResults = ({ keyword, currentPage, resultsPerPage, setCurrentPag
   const navigate = useNavigate();
   const { data: bookResults, isLoading, error } = useSearchBookQuery({ keyword });
 
-  if (isLoading) return <p>Loading books...</p>;
-  if (error) return <p style={{ color: "red" }}>Error: {error.message}</p>;
+  if (!keyword) return null; // 키워드가 없으면 컴포넌트를 렌더링하지 않음
+  if (isLoading)
+    return <p style={{ textAlign: "center", color: "#007BFF" }}>책 정보를 불러오는 중...</p>;
+  if (error)
+    return <p style={{ textAlign: "center", color: "red", fontWeight: "bold" }}>오류: {error.message}</p>;
 
   const totalResults = bookResults?.items?.length || 0;
   const totalPages = Math.ceil(totalResults / resultsPerPage);
@@ -20,21 +23,28 @@ const BookSearchResults = ({ keyword, currentPage, resultsPerPage, setCurrentPag
   return (
     <Row>
       <Col>
-        <h2>Book Search Results</h2>
-        <p style={{ marginBottom: "20px" }}>
-          <strong>Total Results:</strong> {totalResults}
+        <h2 style={{ marginBottom: "20px" }}>책 검색 결과</h2>
+        <p style={{ marginBottom: "20px", color: "#666" }}>
+          <strong>총 검색 결과:</strong> {totalResults}권
         </p>
         {displayedResults?.length ? (
           <ul style={{ listStyleType: "none", padding: 0 }}>
             {displayedResults.map((book) => {
               const { id, volumeInfo } = book;
-              const { title, authors, publisher, publishedDate, description, imageLinks } = volumeInfo;
+              const {
+                title,
+                authors,
+                publisher,
+                publishedDate,
+                description,
+                imageLinks,
+              } = volumeInfo;
 
               const shortDescription = description
                 ? description.length > 150
                   ? `${description.slice(0, 150)}...`
                   : description
-                : "No description available.";
+                : "설명이 없습니다.";
 
               return (
                 <li
@@ -51,7 +61,7 @@ const BookSearchResults = ({ keyword, currentPage, resultsPerPage, setCurrentPag
                 >
                   <img
                     src={imageLinks?.thumbnail || "https://via.placeholder.com/128x192?text=No+Image"}
-                    alt={title}
+                    alt={title || "No Title"}
                     style={{
                       width: "128px",
                       height: "192px",
@@ -59,15 +69,15 @@ const BookSearchResults = ({ keyword, currentPage, resultsPerPage, setCurrentPag
                     }}
                   />
                   <div>
-                    <h3>{title || "No Title Available"}</h3>
+                    <h3>{title || "제목 없음"}</h3>
                     <p>
-                      <strong>Authors:</strong> {authors?.join(", ") || "Unknown Author"}
+                      <strong>저자:</strong> {authors?.join(", ") || "알 수 없음"}
                     </p>
                     <p>
-                      <strong>Publisher:</strong> {publisher || "Unknown Publisher"}
+                      <strong>출판사:</strong> {publisher || "알 수 없음"}
                     </p>
                     <p>
-                      <strong>Published Date:</strong> {publishedDate || "Unknown Date"}
+                      <strong>출판일:</strong> {publishedDate || "알 수 없음"}
                     </p>
                     <p style={{ fontSize: "14px", color: "#666" }}>{shortDescription}</p>
                   </div>
@@ -76,57 +86,62 @@ const BookSearchResults = ({ keyword, currentPage, resultsPerPage, setCurrentPag
             })}
           </ul>
         ) : (
-          <p>No books found for "{keyword}".</p>
+          <p style={{ textAlign: "center", color: "#666" }}>
+            "{keyword}"에 대한 책 검색 결과가 없습니다.
+          </p>
         )}
-        <div style={{ display: "flex", justifyContent: "center", marginTop: "20px" }}>
-          <button
-            onClick={() => setCurrentPage(currentPage - 1)}
-            disabled={currentPage === 1}
-            style={{
-              padding: "5px 10px",
-              margin: "0 5px",
-              cursor: "pointer",
-              backgroundColor: "#007BFF",
-              color: "white",
-              border: "none",
-              borderRadius: "5px",
-            }}
-          >
-            Prev
-          </button>
-          {Array.from({ length: totalPages }, (_, index) => (
+
+        {totalPages > 1 && (
+          <div style={{ display: "flex", justifyContent: "center", marginTop: "20px" }}>
             <button
-              key={index + 1}
-              onClick={() => setCurrentPage(index + 1)}
+              onClick={() => setCurrentPage(currentPage - 1)}
+              disabled={currentPage === 1}
               style={{
                 padding: "5px 10px",
                 margin: "0 5px",
-                cursor: "pointer",
-                backgroundColor: currentPage === index + 1 ? "#007BFF" : "white",
-                color: currentPage === index + 1 ? "white" : "black",
-                border: "1px solid #ccc",
+                cursor: currentPage === 1 ? "not-allowed" : "pointer",
+                backgroundColor: currentPage === 1 ? "#ccc" : "#007BFF",
+                color: "white",
+                border: "none",
                 borderRadius: "5px",
               }}
             >
-              {index + 1}
+              이전
             </button>
-          ))}
-          <button
-            onClick={() => setCurrentPage(currentPage + 1)}
-            disabled={currentPage === totalPages}
-            style={{
-              padding: "5px 10px",
-              margin: "0 5px",
-              cursor: "pointer",
-              backgroundColor: "#007BFF",
-              color: "white",
-              border: "none",
-              borderRadius: "5px",
-            }}
-          >
-            Next
-          </button>
-        </div>
+            {Array.from({ length: totalPages }, (_, index) => (
+              <button
+                key={index + 1}
+                onClick={() => setCurrentPage(index + 1)}
+                style={{
+                  padding: "5px 10px",
+                  margin: "0 5px",
+                  cursor: "pointer",
+                  backgroundColor: currentPage === index + 1 ? "#007BFF" : "white",
+                  color: currentPage === index + 1 ? "white" : "black",
+                  border: "1px solid #ccc",
+                  borderRadius: "5px",
+                }}
+              >
+                {index + 1}
+              </button>
+            ))}
+            <button
+              onClick={() => setCurrentPage(currentPage + 1)}
+              disabled={currentPage === totalPages}
+              style={{
+                padding: "5px 10px",
+                margin: "0 5px",
+                cursor: currentPage === totalPages ? "not-allowed" : "pointer",
+                backgroundColor: currentPage === totalPages ? "#ccc" : "#007BFF",
+                color: "white",
+                border: "none",
+                borderRadius: "5px",
+              }}
+            >
+              다음
+            </button>
+          </div>
+        )}
       </Col>
     </Row>
   );

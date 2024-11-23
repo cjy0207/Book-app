@@ -12,6 +12,7 @@ const BookDetailPage = () => {
   const navigate = useNavigate(); 
   const { data, isLoading, error } = useBookDetailQuery({ id });
   const [showFullDescription, setShowFullDescription] = useState(false);
+  console.log("data", data)
 
   const category = data?.volumeInfo?.categories?.[0] || "";
   const {
@@ -95,7 +96,7 @@ const BookDetailPage = () => {
         </Col>
       </Row>
       <Row className="mt-4">
-        <Col>
+        <Col className="mt-4">
           <h2>Book Description</h2>
           <div style={{ marginTop: "20px", color: "#666" }}>
             <p style={{ textAlign: "justify" }}>{visibleDescription}</p>
@@ -103,7 +104,13 @@ const BookDetailPage = () => {
               <Button
                 variant="link"
                 onClick={handleToggleDescription}
-                style={{ padding: 0, fontSize: "16px", marginTop: "10px" }}
+                style={{
+                  padding: 0,
+                  fontSize: "16px",
+                  marginTop: "10px",
+                  color: "#a38958",
+                  fontWeight: "bold",
+                }}
               >
                 {showFullDescription ? "Show Less ▲" : "Show More ▼"}
               </Button>
@@ -112,12 +119,12 @@ const BookDetailPage = () => {
         </Col>
       </Row>
       <Row className="mt-4">
-        <Col>
+        <Col className="mt-4">
           <h2>
             Other Books by Author
             <Button
               variant="link"
-              style={{ float: "right", fontSize: "14px", padding: 0 }}
+              style={{ float: "right", fontSize: "14px", padding: 0, color:"#a38958" }}
               onClick={() => navigate(`/detail/author/${encodeURIComponent(author)}`)}
             >
               View All
@@ -130,11 +137,15 @@ const BookDetailPage = () => {
           ) : authorBooks?.items?.length > 0 ? (
             <Carousel responsive={responsive} infinite={true} keyBoardControl={true}>
               {authorBooks.items.map((book) => (
-                <div key={book.id} style={{ padding: "10px" }}>
+                <div
+                  key={book.id}
+                  style={{ padding: "10px", cursor: "pointer" }}
+                  onClick={() => navigate(`/detail/book/${book.id}`)} 
+                >
                   <div
                     style={{
                       textAlign: "center",
-                      border: "1px solid #ddd",
+                      border: "none",
                       borderRadius: "8px",
                       padding: "10px",
                     }}
@@ -169,11 +180,15 @@ const BookDetailPage = () => {
           ) : recommendedBooks?.length > 0 ? (
             <Carousel responsive={responsive} infinite={true} keyBoardControl={true}>
               {recommendedBooks.map((book) => (
-                <div key={book.id} style={{ padding: "10px" }}>
+                <div
+                  key={book.id}
+                  style={{ padding: "10px", cursor: "pointer" }}
+                  onClick={() => navigate(`/detail/book/${book.id}`)}
+                >
                   <div
                     style={{
                       textAlign: "center",
-                      border: "1px solid #ddd",
+                      border: "none",
                       borderRadius: "8px",
                       padding: "10px",
                     }}
