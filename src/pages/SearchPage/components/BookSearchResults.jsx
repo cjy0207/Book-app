@@ -9,7 +9,7 @@ const BookSearchResults = ({ keyword, currentPage, resultsPerPage, setCurrentPag
 
   if (!keyword) return null; // 키워드가 없으면 컴포넌트를 렌더링하지 않음
   if (isLoading)
-    return <p style={{ textAlign: "center", color: "#007BFF" }}>책 정보를 불러오는 중...</p>;
+    return <p style={{ textAlign: "center", color: "#a38958" }}>책 정보를 불러오는 중...</p>;
   if (error)
     return <p style={{ textAlign: "center", color: "red", fontWeight: "bold" }}>오류: {error.message}</p>;
 
@@ -100,7 +100,7 @@ const BookSearchResults = ({ keyword, currentPage, resultsPerPage, setCurrentPag
                 padding: "5px 10px",
                 margin: "0 5px",
                 cursor: currentPage === 1 ? "not-allowed" : "pointer",
-                backgroundColor: currentPage === 1 ? "#ccc" : "#007BFF",
+                backgroundColor: currentPage === 1 ? "#ccc" : "#a38958",
                 color: "white",
                 border: "none",
                 borderRadius: "5px",
@@ -116,7 +116,7 @@ const BookSearchResults = ({ keyword, currentPage, resultsPerPage, setCurrentPag
                   padding: "5px 10px",
                   margin: "0 5px",
                   cursor: "pointer",
-                  backgroundColor: currentPage === index + 1 ? "#007BFF" : "white",
+                  backgroundColor: currentPage === index + 1 ? "#a38958" : "white",
                   color: currentPage === index + 1 ? "white" : "black",
                   border: "1px solid #ccc",
                   borderRadius: "5px",
@@ -132,7 +132,7 @@ const BookSearchResults = ({ keyword, currentPage, resultsPerPage, setCurrentPag
                 padding: "5px 10px",
                 margin: "0 5px",
                 cursor: currentPage === totalPages ? "not-allowed" : "pointer",
-                backgroundColor: currentPage === totalPages ? "#ccc" : "#007BFF",
+                backgroundColor: currentPage === totalPages ? "#ccc" : "#a38958",
                 color: "white",
                 border: "none",
                 borderRadius: "5px",
