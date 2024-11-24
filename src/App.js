@@ -6,20 +6,22 @@ import Layout from "./components/Layout";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-import { Route, Routes } from 'react-router-dom';
 import BookDetailPage from './pages/DetailPage/BookDetailPage';
 import AuthorDetailPage from './pages/DetailPage/AuthorDetailPage';
+import Footer from "./components/Footer";
 
 function App() {
   return (
     <Routes>
-      <Route path="/" element={<HomePage />} />
-      <Route path="/search" element={<SearchPage />} />
+      <Route path="/" element={<Layout />}>
+        <Route index element={<HomePage />}/>
 
-      <Route path="/detail">
-        <Route path="book/:id" element={<BookDetailPage />} />
-        <Route path="author/:author" element={<AuthorDetailPage />} />
-        
+        <Route path="/search" element={<SearchPage />} />
+
+        <Route path="/detail">
+          <Route path="book/:id" element={<BookDetailPage />} />
+          <Route path="author/:author" element={<AuthorDetailPage />} />
+        </Route> 
       </Route>
     </Routes>
   );
