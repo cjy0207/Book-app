@@ -9,19 +9,19 @@ const Layout = () => {
   const location = useLocation();
   const hideBanner = location.pathname === "/Basket";
 
-  const [searchInput, setSearchInput] = useState(""); // 검색창 입력 상태
+  const [searchInput, setSearchInput] = useState("");
   const navigate = useNavigate();
 
   const handleSearchSubmit = (e) => {
-    e.preventDefault(); // 기본 동작 방지
+    e.preventDefault(); 
     const trimmedInput = searchInput.trim();
     if (trimmedInput) {
-      navigate(`/search?keyword=${encodeURIComponent(trimmedInput)}`); // 검색 페이지로 이동
-      setSearchInput(""); // 검색어 초기화
+      navigate(`/search?keyword=${encodeURIComponent(trimmedInput)}`); 
+      setSearchInput(""); 
     }
   };
 
-  const [showScrollButton, setShowScrollButton] = useState(false); // Added useState hook
+  const [showScrollButton, setShowScrollButton] = useState(false); 
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -63,7 +63,7 @@ const Layout = () => {
               <button className="nav-button">TOP</button>
               <button className="nav-button">BOOKS</button>
             </div>
-            {/* 검색창 */}
+
             <form onSubmit={handleSearchSubmit}>
               <input
                 type="text"

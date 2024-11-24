@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useParams, useNavigate } from "react-router-dom"; // useNavigate 추가
+import { useParams, useNavigate } from "react-router-dom"; 
 import { useBookDetailQuery } from "../../hooks/useBookDetail";
 import { useGoogleBooksCategory } from "../../hooks/useGoogleBooksCategory";
 import { useSearchBookQuery } from "../../hooks/useSearchBook";

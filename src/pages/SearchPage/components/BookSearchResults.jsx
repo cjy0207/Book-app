@@ -7,7 +7,7 @@ const BookSearchResults = ({ keyword, currentPage, resultsPerPage, setCurrentPag
   const navigate = useNavigate();
   const { data: bookResults, isLoading, error } = useSearchBookQuery({ keyword });
 
-  if (!keyword) return null; // 키워드가 없으면 컴포넌트를 렌더링하지 않음
+  if (!keyword) return null; 
   if (isLoading)
     return <p style={{ textAlign: "center", color: "#a38958" }}>책 정보를 불러오는 중...</p>;
   if (error)
