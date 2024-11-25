@@ -9,7 +9,7 @@ import "./HomePage.css";
 import Footer from "../../components/Footer";
 import Layout from "../../components/Layout";
 
-const HomePage = () => {
+const Homepage = () => {
   const [books, setBooks] = useState([]);
   const [recommendBooks, setRecommendBooks] = useState([]); // 추천 도서 상태 추가
   const [loading, setLoading] = useState(true);
@@ -229,4 +229,4 @@ const HomePage = () => {
   );
 };
 
-export default HomePage;
+export default Homepage;

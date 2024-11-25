@@ -1,6 +1,6 @@
 import "./App.css";
 import { Routes, Route } from "react-router-dom";
-import HomePage from "./pages/HomePage/HomePage";
+import Homepage from "./pages/HomePage/Homepage";
 import SearchPage from "./pages/SearchPage/SearchPage";
 import Layout from "./components/Layout";
 import "bootstrap/dist/css/bootstrap.min.css";
@@ -14,7 +14,7 @@ function App() {
   return (
     <Routes>
       <Route path="/" element={<Layout />}>
-        <Route index element={<HomePage />}/>
+        <Route index element={<Homepage />}/>
 
         <Route path="search" element={<SearchPage />} />
 
