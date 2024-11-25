@@ -1,35 +1,42 @@
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import Carousel from 'react-bootstrap/Carousel';
 import CarouselImage from '../../components/CarouselImage';
 import "./HomePage.css";
-import { useGoogleBooksCategory } from "../../hooks/useGoogleBooksCategory";
+import Footer from "../../components/Footer";
+import Layout from "../../components/Layout";
 
 const HomePage = () => {
-  const [category, setCategory] = useState("Fiction"); 
-  const { data, isLoading, isError, error } = useGoogleBooksCategory(category);
+  const [books, setBooks] = useState([]);
+  const [recommendBooks, setRecommendBooks] = useState([]); // 추천 도서 상태 추가
+  const [loading, setLoading] = useState(true);
 
-  const [books, setBooks] = useState([]); // Added
-  const [loading, setLoading] = useState(true); // Added
+  const navigate = useNavigate(); // useNavigate 훅 추가
 
   const slides = [
-    { id: 1, src: "/images/image1.jpg", alt: "Image 1"},
-    { id: 2, src: "/images/image2.jpg", alt: "Image 2"},
-    { id: 3, src: "/images/image3.jpg", alt: "Image 3"},
+    { id:"TWBlEAAAQBAJ", src: "/images/image1.png", alt: "채식주의자" },
+    { id:"jMtaDwAAQBAJ", src: "/images/image2.png", alt: "흰" },
+    { id:"Q7uTBgAAQBAJ", src: "/images/image3.png", alt: "소년이 온다" },
   ];
 
-  // 구글 북스 API 호출
+  const handleBookClick = (id) => {
+    navigate(`/detail/book/${id}`);
+  };
+  
+
+  // Bestsellers API 호출
   useEffect(() => {
     const fetchBooks = async () => {
       try {
         const response = await fetch(
-          "https://www.googleapis.com/books/v1/volumes?q=bestsellers&maxResults=12" // 12개의 책 데이터 요청
+          "https://www.googleapis.com/books/v1/volumes?q=bestsellers&maxResults=12"
         );
         const data = await response.json();
         if (data.items) {
-          setBooks(data.items); // 책 데이터 설정
+          setBooks(data.items);
         }
         setLoading(false);
       } catch (error) {
@@ -40,32 +47,52 @@ const HomePage = () => {
     fetchBooks();
   }, []);
 
+  // Recommend API 호출
+  useEffect(() => {
+    const fetchRecommendBooks = async () => {
+      try {
+        const response = await fetch(
+          "https://www.googleapis.com/books/v1/volumes?q=subject:fiction&maxResults=12"
+        );
+        const data = await response.json();
+        if (data.items) {
+          setRecommendBooks(data.items);
+        }
+        setLoading(false);
+      } catch (error) {
+        console.error("Error fetching recommended books:", error);
+        setLoading(false);
+      }
+    };
+    fetchRecommendBooks();
+  }, []);
+
   // 슬라이더 설정
   const sliderSettings = {
-    dots: true, // 하단 페이지 점 표시
-    infinite: true, // 무한 슬라이드
-    speed: 500, // 슬라이드 전환 속도
-    slidesToShow: 4, // 한 화면에 보여줄 책 개수
-    slidesToScroll: 4, // 한 번에 스크롤할 책 개수
+    dots: true,
+    infinite: true,
+    speed: 500,
+    slidesToShow: 4,
+    slidesToScroll: 4,
     responsive: [
       {
-        breakpoint: 1024, // 화면 너비 1024px 이하
+        breakpoint: 1024,
         settings: {
-          slidesToShow: 3, // 한 화면에 3개씩 표시
-          slidesToScroll: 3, // 한 번에 스크롤 3개
+          slidesToShow: 3,
+          slidesToScroll: 3,
         },
       },
       {
-        breakpoint: 768, // 화면 너비 768px 이하
+        breakpoint: 768,
         settings: {
-          slidesToShow: 2, // 한 화면에 2개씩 표시
+          slidesToShow: 2,
           slidesToScroll: 2,
         },
       },
       {
-        breakpoint: 480, // 화면 너비 480px 이하
+        breakpoint: 480,
         settings: {
-          slidesToShow: 1, // 한 화면에 1개씩 표시
+          slidesToShow: 1,
           slidesToScroll: 1,
         },
       },
@@ -74,71 +101,130 @@ const HomePage = () => {
 
   return (
     <div>
-     <Carousel>
+      {/* Carousel */}
+      <Carousel className="Carousel">
         {slides.map((slide) => (
-          <Carousel.Item key={slide.id}>
-            {/* CarouselImage 컴포넌트로 이미지 렌더링 */}
+          <Carousel.Item key={slide.id} onClick={()=>handleBookClick(slide.id)}>
             <CarouselImage src={slide.src} alt={slide.alt} />
-            <Carousel.Caption>
-              <h3>{slide.text}</h3>
-            </Carousel.Caption>
           </Carousel.Item>
         ))}
       </Carousel>
-
-      <h3>Bestsellers</h3>
+      {/* Bestsellers Section */}
+      <h5>Bestsellers</h5>
       {loading ? (
-        <p>Loading...</p> // 로딩 중일 때 표시
+        <p>Loading...</p>
       ) : (
-        <Slider {...sliderSettings}>
-          {books.map((book) => (
-            <div key={book.id} style={{ padding: "10px" }}>
-              <img
-                src={
-                  book.volumeInfo.imageLinks?.thumbnail || "/path/to/default.jpg"
-                }
-                alt={book.volumeInfo.title}
-                style={{
-                  width: "100%",
-                  height: "300px",
-                  objectFit: "cover",
-                  borderRadius: "8px",
-                }}
-              />
-              <p style={{ textAlign: "center", marginTop: "10px" }}>
-                {book.volumeInfo.title}
-              </p>
-            </div>
-          ))}
-        </Slider>
+        <Slider {...sliderSettings} className="Slider">
+  {books.map((book) => (
+    <div
+      key={book.id}
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        justifyContent: "center",
+        padding: "20px",
+      }}
+      onClick={() => handleBookClick(book.id)}
+    >
+      <img
+        src={
+          book.volumeInfo.imageLinks?.thumbnail || "/path/to/default.jpg"
+        }
+        alt={book.volumeInfo.title}
+        style={{
+          width: "200px",
+          height: "300px",
+          objectFit: "cover",
+          borderRadius: "8px",
+          boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
+          marginBottom: "15px",
+        }}
+      />
+      <p
+        style={{
+          textAlign: "center",
+          fontSize: "16px",
+          fontWeight: "bold",
+          color: "#333",
+        }}
+      >
+        {book.volumeInfo.title}
+      </p>
+      <p
+        style={{
+          textAlign: "center",
+          fontSize: "14px",
+          color: "#777",
+        }}
+      >
+        {book.volumeInfo.authors?.join(", ") || "Unknown Author"}
+      </p>
+    </div>
+  ))}
+</Slider>
+
       )}
 
-<h3>Bestsellers</h3>
+      {/* Recommend Section */}
+      <h5>Recommend</h5>
       {loading ? (
-        <p>Loading...</p> // 로딩 중일 때 표시
+        <p>Loading...</p>
       ) : (
-        <Slider {...sliderSettings}>
-          {books.map((book) => (
-            <div key={book.id} style={{ padding: "10px" }}>
-              <img
-                src={
-                  book.volumeInfo.imageLinks?.thumbnail || "/path/to/default.jpg"
-                }
-                alt={book.volumeInfo.title}
-                style={{
-                  width: "100%",
-                  height: "300px",
-                  objectFit: "cover",
-                  borderRadius: "8px",
-                }}
-              />
-              <p style={{ textAlign: "center", marginTop: "10px" }}>
-                {book.volumeInfo.title}
-              </p>
-            </div>
-          ))}
-        </Slider>
+        <Slider {...sliderSettings} className="Slider">
+  {recommendBooks.map((book) => (
+    <div
+      key={book.id}
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        justifyContent: "center",
+        padding: "20px",
+      }}
+      onClick={() => handleBookClick(book.id)}
+    >
+      <img
+        src={
+          book.volumeInfo.imageLinks?.thumbnail || "/path/to/default.jpg"
+        }
+        alt={book.volumeInfo.title}
+        style={{
+          width: "200px",
+          height: "300px",
+          objectFit: "cover",
+          borderRadius: "8px",
+          boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
+          marginBottom: "15px",
+          transition: "transform 0.3s ease, box-shadow 0.3s ease",
+        }}
+      />
+      <p
+        style={{
+          textAlign: "center",
+          fontSize: "16px",
+          fontWeight: "bold",
+          color: "#333",
+        }}
+      >
+        {book.volumeInfo.title}
+      </p>
+      <p
+        style={{
+          textAlign: "center",
+          fontSize: "14px",
+          color: "#777",
+        }}
+      >
+        {book.volumeInfo.authors?.join(", ") || "Unknown Author"}
+      </p>
+    </div>
+  ))}
+</Slider>
+
       )}
+
+<Footer />
     </div>
   );
 };

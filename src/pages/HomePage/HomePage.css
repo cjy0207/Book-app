@@ -1,0 +1,29 @@
+.slick-slide {
+    display: flex !important;
+    justify-content: center;
+  }
+  
+  .slick-list {
+    margin: 40px auto;
+  }
+  
+  .slick-prev:before, .slick-next:before {
+    color: #333; /* 화살표 색상 */
+  }
+  
+  img {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  
+  img:hover {
+    transform: scale(1.05); /* 호버 시 확대 효과 */
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); /* 호버 시 그림자 효과 */
+  }
+  
+  .Carousel{
+    padding-bottom: 5%;
+  }
+
+  h5 {
+    padding-left: 20px;
+  }

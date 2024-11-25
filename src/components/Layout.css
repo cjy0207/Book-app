@@ -18,12 +18,27 @@
 }
 
 .logo {
-    font-size: 32px;
-    font-weight: bold;
-    color: #a38958;
-    margin: 0;
-    padding-bottom: 20px;
+  font-size: 32px;
+  font-weight: bold;
+  color: #a38958;
+  margin: 0;
+  padding-bottom: 20px;
+  cursor: pointer;
 }
+
+.logo:active {
+  animation: clickEffect 0.2s ease;
+}
+
+@keyframes clickEffect {
+  0% {
+    color: gray;
+  }
+  100% {
+    color: #a38958;
+  }
+}
+
 
 
 /* 네비게이션 스타일 */
@@ -122,5 +137,29 @@
   
   .category-item:active {
     background-color: #a38958;
+  }
+  
+  .header-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .header-buttons {
+    display: flex;
+    gap: 10px; /* 버튼 간의 간격 */
+  }
+  
+  .header-button {
+    background: none;
+    border: none;
+    font-size: 14px;
+    color: black;
+    cursor: pointer;
+    padding: 0; /* 기존 텍스트의 높이를 유지 */
+  }
+  
+  .header-button:hover {
+    text-decoration: underline; /* 호버 효과 추가 */
   }
   
