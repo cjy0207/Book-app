@@ -13,7 +13,7 @@ const AuthorSearchResults = ({ keyword }) => {
 
   if (!keyword) return null;
   if (isLoading) 
-    return <p style={{ textAlign: "center", color: "#007BFF" }}>저자 정보를 불러오는 중...</p>;
+    return <p style={{ textAlign: "center", color: "#a38958" }}>저자 정보를 불러오는 중...</p>;
   if (error) 
     return <p style={{ textAlign: "center", color: "red", fontWeight: "bold" }}>오류: {error.message}</p>;
 

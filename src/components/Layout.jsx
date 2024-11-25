@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { Modal, Button, Form } from "react-bootstrap";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
-import { useGoogleBooksCategory } from "../hooks/useGoogleBooksCategory";
 import "./Layout.css";
 import Footer from "./Footer";
 
@@ -9,39 +8,23 @@ const Layout = () => {
   const location = useLocation();
   const hideBanner = location.pathname === "/Basket";
 
-  const [category, setCategory] = useState("Fiction");
   const [showCategories, setShowCategories] = useState(false);
-  const { data, isLoading, isError, error } = useGoogleBooksCategory(category);
   const [searchQuery, setSearchQuery] = useState("");
   const navigate = useNavigate();
-
   const [showModal, setShowModal] = useState(false);
 
-  const handleCategoryChange = (e) => {
-    setCategory(e.target.value);
-    setShowCategories(false); // Close dropdown after selecting a category
+  const handleCategoryChange = (category) => {
+    navigate(`/category/${encodeURIComponent(category)}`);
+    setShowCategories(false); 
   };
-
-  const handleLogoClick = () => {
-    navigate("/"); // Navigate to home
-  };
-
-  if (isLoading) {
-    return <h1>Loading...</h1>;
-  }
-
-  if (isError) {
-    console.error("Error:", error);
-    return <h1>Error occurred</h1>;
-  }
 
   const handleSearch = (e) => {
-    e.preventDefault(); // Prevent form submission
+    e.preventDefault();
     if (searchQuery.trim() === "") {
       alert("검색어를 입력해주세요!");
       return;
     }
-    navigate(`/search?keyword=${encodeURIComponent(searchQuery)}`); // Navigate to SearchPage with query
+    navigate(`/search?keyword=${encodeURIComponent(searchQuery)}`); 
   };
 
   return (
@@ -63,12 +46,11 @@ const Layout = () => {
                 <button className="header-button">BASKET</button>
               </div>
             </div>
-            <h1 onClick={handleLogoClick} className="logo">
+            <h1 onClick={() => navigate("/")} className="logo">
               DEMOBOOKS
             </h1>
           </div>
 
-          {/* Navigation */}
           <nav className="navbar">
             <div>
               <button className="nav-button">NEW</button>
@@ -80,21 +62,22 @@ const Layout = () => {
                 BOOKS
               </button>
             </div>
-            {/* Search bar */}
+           
             <form onSubmit={handleSearch}>
               <input
                 type="text"
                 className="search-input"
                 placeholder="Search books..."
                 value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)} // Update state
+                onChange={(e) => setSearchQuery(e.target.value)}
               />
               <button className="search-button" type="submit">
                 Search
               </button>
             </form>
           </nav>
-          {/* Category dropdown */}
+
+          
           {showCategories && (
             <div className="category-dropdown">
               <button
@@ -105,21 +88,27 @@ const Layout = () => {
               </button>
               <button
                 className="category-item"
-                onClick={() => handleCategoryChange("Non-fiction")}
+                onClick={() => handleCategoryChange("History")}
               >
-                Non-fiction
+                History
               </button>
               <button
                 className="category-item"
-                onClick={() => handleCategoryChange("Mystery")}
+                onClick={() => handleCategoryChange("Romance")}
               >
-                Mystery
+                Romance
               </button>
               <button
                 className="category-item"
-                onClick={() => handleCategoryChange("Science Fiction")}
+                onClick={() => handleCategoryChange("Science")}
               >
-                Science Fiction
+                Science
+              </button>
+              <button
+                className="category-item"
+                onClick={() => handleCategoryChange("Comics & Graphic Novels")}
+              >
+                Comics & Graphic Novels
               </button>
             </div>
           )}
@@ -129,7 +118,7 @@ const Layout = () => {
         <Outlet />
       </main>
 
-      {/* Login Modal */}
+      
       <Modal show={showModal} onHide={() => setShowModal(false)} centered>
         <Modal.Header closeButton>
           <Modal.Title>로그인</Modal.Title>

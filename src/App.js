@@ -8,6 +8,7 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import BookDetailPage from './pages/DetailPage/BookDetailPage';
 import AuthorDetailPage from './pages/DetailPage/AuthorDetailPage';
+import CategoryPage from "./pages/CategoryPage/CategoryPage";
 
 function App() {
   return (
@@ -21,6 +22,10 @@ function App() {
           <Route path="book/:id" element={<BookDetailPage />} />
           <Route path="author/:author" element={<AuthorDetailPage />} />
         </Route> 
+
+        <Route path="category/:category" element={<CategoryPage />} />
+
+
       </Route>
     </Routes>
   );
