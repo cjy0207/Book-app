@@ -1,6 +1,6 @@
 import React,{ useState } from "react";
 import { Modal, Button, Form } from "react-bootstrap";
-import { Outlet, useLocation } from "react-router-dom";
+import { Outlet, useLocation,Link } from "react-router-dom";
 import { useGoogleBooksCategory } from "../hooks/useGoogleBooksCategory";
 import "./Layout.css";
 import { useNavigate } from "react-router-dom";
@@ -21,6 +21,10 @@ const Layout = () => {
   const handleCategoryChange = (e) => {
     setCategory(e.target.value);
     setShowCategories(false); // 카테고리 선택 후 드롭다운 닫기
+  };
+
+  const handleLogoClick = () => {
+    navigate('/'); // 홈 경로로 이동
   };
 
   if (isLoading) {
@@ -65,7 +69,7 @@ const Layout = () => {
                   <button className="header-button">BASKET</button>
                 </div>
             </div>
-            <h1 className="logo">DEMOBOOKS</h1>
+            <h1 onClick={handleLogoClick} className="logo">DEMOBOOKS</h1>
          </div>
           
           {/* 네비게이션 */}

@@ -67,7 +67,7 @@ const AuthorDetailPage = () => {
                       <p style={{ marginBottom: "5px" }}>
                         <strong>Published Date:</strong> {publishedInfo}
                       </p>
-                      <p style={{ fontSize: "14px", color: "#666" }}>{shortDescription}</p>
+                      <p style={{ fontSize: "14px", color: "black" }}>{shortDescription}</p>
                     </div>
                   </li>
                 );

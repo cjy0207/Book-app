@@ -18,12 +18,27 @@
 }
 
 .logo {
-    font-size: 32px;
-    font-weight: bold;
-    color: #a38958;
-    margin: 0;
-    padding-bottom: 20px;
+  font-size: 32px;
+  font-weight: bold;
+  color: #a38958;
+  margin: 0;
+  padding-bottom: 20px;
+  cursor: pointer;
 }
+
+.logo:active {
+  animation: clickEffect 0.2s ease;
+}
+
+@keyframes clickEffect {
+  0% {
+    color: gray;
+  }
+  100% {
+    color: #a38958;
+  }
+}
+
 
 
 /* 네비게이션 스타일 */

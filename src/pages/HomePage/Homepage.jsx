@@ -6,8 +6,8 @@ import "slick-carousel/slick/slick-theme.css";
 import Carousel from 'react-bootstrap/Carousel';
 import CarouselImage from '../../components/CarouselImage';
 import "./HomePage.css";
-import Layout from "../../components/Layout";
 import Footer from "../../components/Footer";
+import Layout from "../../components/Layout";
 
 const HomePage = () => {
   const [books, setBooks] = useState([]);
